@@ -1,7 +1,7 @@
 import pygame 
 
-from draw_board import draw_board
-from put_pieces import put_pieces
+from setup.draw_board import draw_board
+from setup.put_pieces import put_pieces
 
 SCREEN_HEIGHT = 720 
 SCREEN_WIDTH = 720 
