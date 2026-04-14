@@ -5,6 +5,7 @@ from setup.put_pieces import put_pieces
 
 from game.move import select_rect
 from game.move import move
+from game.move import detect_valid_selection
 
 SCREEN_HEIGHT = 720 
 SCREEN_WIDTH = 720 
@@ -20,6 +21,9 @@ position = [
         ["Rw", "Nw", "Bw", "Qw", "Kw", "Bw", "Nw", "Rw"],
         ]
 
+black_pieces = ["Rb", "Nb", "Bb", "Qb", "Kb", "Pb"]
+white_pieces = ["Rw", "Nw", "Bw", "Qw", "Kw", "Pw"]
+
 
 def render_screen():
     pygame.init() 
@@ -28,9 +32,15 @@ def render_screen():
     running = True
     click_locked = False
 
-    draw_board(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH)
-    put_pieces(screen, position)
+    def render_board_pieces(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH, selected_rect = ""):
+        draw_board(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH)
+        if selected_rect != "":
+            pygame.draw.rect(screen, (255, 0, 0), selected_rect) 
+        put_pieces(screen, position)
 
+    render_board_pieces(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH)
+
+    current_turn = True #True for White's turn and False for Black's turn 
     select_or_target = True # True for select and False for target
 
     selected_square = []
@@ -46,40 +56,35 @@ def render_screen():
                 click_locked == True
                 mouse_pos = pygame.mouse.get_pos()
             
-                clicked_rect, piece, clicked_square = select_rect(screen, mouse_pos, position)
+                clicked_rect, clicked_piece, clicked_square = select_rect(screen, mouse_pos, position)
 
                 if select_or_target == True:
-                    if piece == '':
-                        continue 
+                    is_selection_valid = detect_valid_selection(clicked_piece, current_turn)
+                    if is_selection_valid == False:
+                        continue
                     else:
                         selected_rect = clicked_rect
-                        selected_piece = piece
+                        selected_piece = clicked_piece
                         selected_square = clicked_square
                         select_or_target = False
-                        draw_board(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH)
-                        pygame.draw.rect(screen, (255, 0, 0), selected_rect) 
-                        put_pieces(screen, position)
+                        render_board_pieces(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH, selected_rect = selected_rect) 
+                        print("Piece Selected: ", selected_piece)
+                        print("Select Or Target: ", select_or_target)
                 else:
                     # TODO Check valid move
-                    if piece == "":
+                    is_move_valid = True
+                    if is_move_valid == True:
                         target_rect = clicked_rect
                         target_piece = ""
-                        target_sqaure = clicked_square
+                        target_square = clicked_square
                         select_or_target = True
 
-                        new_position = move(screen, selected_square, selected_piece, target_sqaure, target_piece, position)
-                    else:
-                        target_rect = clicked_rect
-                        target_piece = piece
-                        target_sqaure = clicked_square
-
-                        select_or_target = True
-
-                    
-                    target_piece = ""
-                    target_sqaure = ""
-                    target_rect = ""
-
+                        next_turn = move(screen, selected_square, selected_piece, target_square, target_piece, current_turn, position)
+                        render_board_pieces(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH, selected_rect = selected_rect)
+                        if next_turn == False:
+                            current_turn = False 
+                        else:
+                            current_turn = True 
 
                 if select_or_target:
                     print("Select Now") 
