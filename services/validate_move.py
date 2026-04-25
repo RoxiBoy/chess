@@ -34,7 +34,7 @@ def is_take_possible(color1, color2):
 def is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, color, is_take_possible):
     if color = True:
         if Y_index_target != Y_index_piece - 1:
-            return False
+            return False, "[Invalid Move]: Pawns Must Move Forward"
 
         if X_index_target != X_index_piece:
             if target_piece != '' and is_take_possible:
