@@ -20,7 +20,7 @@ def detect_piece_color(piece):
         return True 
 
 
-def detect_valid_selection(piece, current_turn):
+def validate_turn(piece, current_turn):
     if piece == "":
         return False
 
@@ -43,12 +43,6 @@ def move(surface, selected_square, selected_piece, target_square, target_piece, 
     Y_target = target_square[0]
     X_target = target_square[1]
 
-    print("Selected Piece: ", selected_piece)
-    print("Target Piece: ", target_piece)
-
-    print("Selected Square: ", selected_square)
-    print("Target Square: ", target_square)
-
     position[Y_target][X_target] = selected_piece
     position[Y_selected][X_selected] = ""
 
@@ -56,9 +50,6 @@ def move(surface, selected_square, selected_piece, target_square, target_piece, 
         print(selected_piece, "->", target_pieces)
     else:
         print(selected_piece, "->", target_square)
-
-    print("New Position:")
-    print(position)
 
     if current_turn == False:
         return True
