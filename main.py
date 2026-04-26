@@ -8,6 +8,7 @@ from game.move import move
 from game.move import validate_turn
 
 from services.validate_move import is_move_valid 
+from services.print_board import print_board
 
 SCREEN_HEIGHT = 720 
 SCREEN_WIDTH = 720 
@@ -82,6 +83,7 @@ def render_screen():
                     if validity_move == True:
 
                         next_turn = move(screen, selected_square, selected_piece, target_square, target_piece, current_turn, position)
+                        print_board(position)
                         render_board_pieces(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH, selected_rect = selected_rect)
                         if next_turn == False:
                             current_turn = False 

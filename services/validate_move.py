@@ -32,6 +32,7 @@ def is_take_possible(color1, color2):
         return True
 
 def is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, color, is_take_possible):
+    print("=== Checking Pawn Move Validity ===")
     if color == True:
         if Y_index_target != Y_index_piece - 1:
             return False, "[Invalid Move]: Pawns Must Move Forward"
@@ -65,6 +66,57 @@ def is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_tar
             else:
                 return True, '[Valid Move]: Pushing Pawns'
 
+
+def is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible):
+    print("=== Checking Rook Move Validity ===")
+    if X_index_piece == X_index_target:
+        if Y_index_piece == Y_index_target:
+            return False, "[Invalid Move]: Not To The Same Square You Moronnnnnn!"
+
+    if X_index_piece != X_index_target and Y_index_piece != Y_index_target:
+        print("Here")
+        return False, "[Invalid Move]: Rooks Can only Move Vertically or Horizontally Straight"
+    
+    if take_possible == False:
+        return False, "[Invalid Move]: Cannot Take Your Own Piece"
+
+    if X_index_piece == X_index_target and Y_index_target < Y_index_piece:
+        Y_index_piece_copy = Y_index_piece
+        while Y_index_target + 1 < Y_index_piece_copy - 1:
+            Y_index_piece_copy = Y_index_piece_copy - 1
+            if position[Y_index_piece_copy][X_index_piece] != '':
+                print("(", Y_index_piece_copy, " ," ,X_index_piece, "): ", position[Y_index_piece_copy][X_index_piece], " In The  Way")
+                return False, '[Invalid Move]: Something In The Wayy'
+
+    if X_index_piece == X_index_target and Y_index_target > Y_index_piece:
+        Y_index_piece_copy = Y_index_piece
+        while Y_index_target - 1> Y_index_piece_copy:
+            Y_index_piece_copy = Y_index_piece_copy + 1
+            if position[Y_index_piece_copy][X_index_piece] != '':
+                print("(", Y_index_piece_copy, " ," ,X_index_piece, "): ", position[Y_index_piece_copy][X_index_piece], " In The  Way")
+                return False, '[Invalid Move]: Something In The Wayy'
+
+    if Y_index_piece == Y_index_target and X_index_target < X_index_piece:
+        X_index_piece_copy = X_index_piece
+        while X_index_target + 1 < X_index_piece_copy:
+            X_index_piece_copy = X_index_piece_copy - 1
+            if position[Y_index_piece][X_index_piece_copy] != '':
+                return False, '[Invalid Move]: Something In The Wayy'
+
+    if Y_index_piece == Y_index_target and X_index_target > X_index_piece:
+        X_index_piece_copy = X_index_piece
+        while X_index_target - 1 > X_index_piece_copy:
+            X_index_piece_copy = X_index_piece_copy + 1
+            if position[Y_index_piece][X_index_piece_copy] != '':
+                print(X_index_target, ">", X_index_piece_copy)
+                return False, '[Invalid Move]: Something In The Wayy'
+
+    if target_piece != '' and take_possible == True:
+        return True, '[Valid Move]: Taking With The Rooooooooooook! '
+
+    if target_piece == '':
+        return True, "[Valid Move]: Moving Your Rook Somewhere, Noice"
+
             
 def is_move_valid(piece, square, position, target_square):
     Y_index_piece = square[0]
@@ -76,15 +128,20 @@ def is_move_valid(piece, square, position, target_square):
     target_piece = position[Y_index_target][X_index_target]
 
     piece_color = detect_piece_color(piece)
-    target_color = ''
-    take_possible = False
+    target_color = False if piece_color == True else True
+    take_possible = True 
     if target_piece != '':
         target_color = detect_piece_color(target_piece)
+        take_possible = is_take_possible(piece_color, target_color)
 
-    take_possible = is_take_possible(piece_color, target_color)
 
     if piece[0] == 'P':
         validity, message = is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+        print(message)
+        return validity
+
+    if piece[0] == 'R':
+        validity, message = is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
         print(message)
         return validity
 
