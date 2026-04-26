@@ -7,7 +7,7 @@ def get_pawn_moves(square, color, position, moves):
 
     print("Current Square: (",Y_index, ', ', X_index, ')') 
 
-    if color = True:
+    if color == True:
         if Y_index-1 >= 0:
             moves.append([(Y_index-1), (X_index)])
         if Y_index-1 >= 0 and X_index+1 <= 7:
@@ -20,7 +20,7 @@ def get_pawn_moves(square, color, position, moves):
         print(moves)
         return moves
 
-    if color = False:
+    if color == False:
         if Y_index+1 <= 7:
             moves.append([(Y_index+1), (X_index)])
         if Y_index+1 <= 7 and X_index+1 <= 7: 
@@ -38,7 +38,7 @@ def get_pawn_moves(square, color, position, moves):
 
 def get_all_moves(square, piece, position, moves):
 
-    if piece[0] = 'P':
+    if piece[0] == 'P':
         piece_color = detect_piece_color(piece)
         get_pawn_moves(square, color, position, moves)
         

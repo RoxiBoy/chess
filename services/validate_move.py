@@ -32,42 +32,41 @@ def is_take_possible(color1, color2):
         return True
 
 def is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, color, is_take_possible):
-    if color = True:
+    if color == True:
         if Y_index_target != Y_index_piece - 1:
             return False, "[Invalid Move]: Pawns Must Move Forward"
 
         if X_index_target != X_index_piece:
             if target_piece != '' and is_take_possible:
-                return True 
+                return True, '[Valid Move]: Taking By Pawn'
             else:
-                return False 
+                return False, '[Invalid Move]: Attacking your own piece or Wrong Pawn Move, i.e. Diagnol while not attacking'
         else:
-            if target_piece != '' and is_take_possible:
-                return False 
+            if target_piece != '':
+                return False, '[Invalid Move]: Pawns Cannot Attack Piece Straight Infront' 
             else:
-                return True
+                return True, '[Valid Move]: Pushing Pawn'
 
             
 
 
-    if color = False:
+    if color == False:
         if Y_index_target != Y_index_piece + 1:
-            return False
-
+            return False, "[Invalid Move]: Pawns Must Move Forward"
 
         if X_index_target != X_index_piece:
             if target_piece != '' and is_take_possible:
-                return True 
+                return True, '[Valid Move]: Taking By Pawn'
             else:
-                return False 
+                return False, '[Invalid Move]: Attacking your own piece or Wrong Pawn Move, i.e. Diagnol while not attacking'
         else:
-            if target_piece != '' and is_take_possible:
-                return False 
+            if target_piece != '':
+                return False, '[Invalid Move]: Pawns Cannot Attack Piece Straight Infront' 
             else:
-                return True
+                return True, '[Valid Move]: Pushing Pawns'
 
-
-def is_move_valid(piece, square, position, target_square)
+            
+def is_move_valid(piece, square, position, target_square):
     Y_index_piece = square[0]
     X_index_piece = square[1]
 
@@ -77,12 +76,18 @@ def is_move_valid(piece, square, position, target_square)
     target_piece = position[Y_index_target][X_index_target]
 
     piece_color = detect_piece_color(piece)
-    target_color = detect_piece_color(color)
+    target_color = ''
+    take_possible = False
+    if target_piece != '':
+        target_color = detect_piece_color(target_piece)
 
-    is_take_possible = is_take_possible(piece_color, target_color)
+    take_possible = is_take_possible(piece_color, target_color)
 
     if piece[0] == 'P':
-        return is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, is_take_possible)
+        validity, message = is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+        print(message)
+        return validity
+
 
 
 

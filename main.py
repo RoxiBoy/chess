@@ -78,8 +78,8 @@ def render_screen():
                     target_square = clicked_square
                     select_or_target = True
 
-                    is_move_valid = is_move_valid(selected_piece, selected_square, position, target_square)
-                    if is_move_valid == True:
+                    validity_move = is_move_valid(selected_piece, selected_square, position, target_square)
+                    if validity_move == True:
 
                         next_turn = move(screen, selected_square, selected_piece, target_square, target_piece, current_turn, position)
                         render_board_pieces(screen, clock, SCREEN_HEIGHT, SCREEN_WIDTH, selected_rect = selected_rect)
