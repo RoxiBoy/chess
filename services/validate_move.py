@@ -117,6 +117,31 @@ def is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_tar
     if target_piece == '':
         return True, "[Valid Move]: Moving Your Rook Somewhere, Noice"
 
+
+def is_legal_knight_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible):
+    if target_piece != '' and take_possible == False:
+        return False, '[Invalid Move]: Cannot Take Your Own Piece'
+
+    if X_index_target - X_index_piece == 2 or X_index_target - X_index_piece == -2:
+        if Y_index_target - Y_index_piece == 1 or Y_index_target - Y_index_piece == -1:
+            if target_piece == '':
+                return True, '[Valid Move]: Valid Knight Move'
+
+            if target_piece != '' and take_possible == True:
+                return True, '[Valid Move]: Yeahh Taking With The Knight'
+
+    if Y_index_target - Y_index_piece == 2 or Y_index_target - Y_index_piece == -2:
+        if X_index_target - X_index_piece == 1 or X_index_target - X_index_piece == -1:
+            if target_piece == '':
+                return True, '[Valid Move]: Valid Knight Move'
+
+            if target_piece != '' and take_possible == True:
+                return True, '[Valid Move]: Yeahh Taking With The Knight'
+
+    return False, '[Invalid Move]: You Moron! Know That The Knight Moves in L Shape'
+
+
+
             
 def is_move_valid(piece, square, position, target_square):
     Y_index_piece = square[0]
@@ -144,6 +169,12 @@ def is_move_valid(piece, square, position, target_square):
         validity, message = is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
         print(message)
         return validity
+
+    if piece[0] == 'N':
+        validity, message = is_legal_knight_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+        print(message)
+        return validity
+
 
 
 
