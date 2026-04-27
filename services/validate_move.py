@@ -34,8 +34,18 @@ def is_take_possible(color1, color2):
 def is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, color, is_take_possible):
     print("=== Checking Pawn Move Validity ===")
     if color == True:
-        if Y_index_target != Y_index_piece - 1:
+        if Y_index_target > Y_index_piece:
             return False, "[Invalid Move]: Pawns Must Move Forward"
+
+        if Y_index_piece == 6:
+            if X_index_target == X_index_piece:
+                if Y_index_piece - Y_index_target <= 2:
+                    return True, "[Valid Move]: Only Pawns At The Starting Sqare Can Move 2 Squares"
+                else:
+                    return False, "[Invalid Move]: Only Pawns At The Starting Sqare Can Move 2 Squares"
+
+        if Y_index_piece != 6 and Y_index_piece - Y_index_target > 1:
+            return False, "[Invalid Move]: Only Pawns At The Starting Sqare Can Move 2 Squares"
 
         if X_index_target != X_index_piece:
             if target_piece != '' and is_take_possible:
@@ -52,8 +62,21 @@ def is_legal_pawn_move(Y_index_piece, X_index_piece, Y_index_target, X_index_tar
 
 
     if color == False:
-        if Y_index_target != Y_index_piece + 1:
+        if Y_index_target < Y_index_piece:
             return False, "[Invalid Move]: Pawns Must Move Forward"
+
+        if Y_index_piece == 1:
+            if X_index_target == X_index_piece:
+                if Y_index_target - Y_index_piece <= 2:
+                    print("Y_index_piece: ", Y_index_piece, "Y_index_target: ", Y_index_target)
+                    return True, "[Valid Move]: Only Pawns At The Starting Sqare Can Move 2 Squares"
+                else:
+                    return False, "[Invalid Move]: Only Pawns At The Starting Sqare Can Move 2 Squares"
+
+
+
+        if Y_index_piece != 1 and Y_index_target - Y_index_piece > 1:
+            return False, "[Invalid Move]: Only Pawns At The Starting Sqare Can Move 2 Squares"
 
         if X_index_target != X_index_piece:
             if target_piece != '' and is_take_possible:
@@ -200,9 +223,22 @@ def is_legal_bishop_move(Y_index_piece, X_index_piece, Y_index_target, X_index_t
         return True, '[Valid Move]: Sheesshhhh We Moving Diagnolly'
 
     if position[Y_index_target][X_index_target] != '' and take_possible == True:
-        return True, '[Valid Move]: Yohooo Took With The Bishop'
+        return True, '[Valid Move]: Yohooo Took With The Bishop Move'
 
-            
+def is_legal_queen_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible):
+    validity_via_rook, message_via_rook = is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+    validity_via_bishop, message_via_bishop = is_legal_bishop_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+
+    if validity_via_rook == True:
+        return True, message_via_rook
+
+    if validity_via_bishop == True:
+        return True, message_via_bishop
+
+    if validity_via_bishop == False and validity_via_rook == False:
+        return False, "[Invalid Move]: You made an Invalid Move With The Queen! That's Something"
+
+
 def is_move_valid(piece, square, position, target_square):
     Y_index_piece = square[0]
     X_index_piece = square[1]
@@ -239,6 +275,14 @@ def is_move_valid(piece, square, position, target_square):
         validity, message = is_legal_bishop_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
         print(message)
         return validity
+
+    if piece[0] == 'Q':
+        validity, message = is_legal_queen_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+        print(message)
+        return validity
+
+
+    
 
 
 
