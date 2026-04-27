@@ -85,7 +85,6 @@ def is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_tar
         while Y_index_target + 1 < Y_index_piece_copy - 1:
             Y_index_piece_copy = Y_index_piece_copy - 1
             if position[Y_index_piece_copy][X_index_piece] != '':
-                print("(", Y_index_piece_copy, " ," ,X_index_piece, "): ", position[Y_index_piece_copy][X_index_piece], " In The  Way")
                 return False, '[Invalid Move]: Something In The Wayy'
 
     if X_index_piece == X_index_target and Y_index_target > Y_index_piece:
@@ -93,7 +92,6 @@ def is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_tar
         while Y_index_target - 1> Y_index_piece_copy:
             Y_index_piece_copy = Y_index_piece_copy + 1
             if position[Y_index_piece_copy][X_index_piece] != '':
-                print("(", Y_index_piece_copy, " ," ,X_index_piece, "): ", position[Y_index_piece_copy][X_index_piece], " In The  Way")
                 return False, '[Invalid Move]: Something In The Wayy'
 
     if Y_index_piece == Y_index_target and X_index_target < X_index_piece:
@@ -119,8 +117,15 @@ def is_legal_rook_move(Y_index_piece, X_index_piece, Y_index_target, X_index_tar
 
 
 def is_legal_knight_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible):
+
+    print("=== Checking Knight Move Validity ===")
+
     if target_piece != '' and take_possible == False:
         return False, '[Invalid Move]: Cannot Take Your Own Piece'
+
+    if X_index_piece == X_index_target:
+        if Y_index_piece == Y_index_target:
+            return False, "[Invalid Move]: Not To The Same Square You Moronnnnnn!"
 
     if X_index_target - X_index_piece == 2 or X_index_target - X_index_piece == -2:
         if Y_index_target - Y_index_piece == 1 or Y_index_target - Y_index_piece == -1:
@@ -140,7 +145,62 @@ def is_legal_knight_move(Y_index_piece, X_index_piece, Y_index_target, X_index_t
 
     return False, '[Invalid Move]: You Moron! Know That The Knight Moves in L Shape'
 
+def is_legal_bishop_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible):
 
+    print("=== Checking Bishop Move Validity ===")
+
+    if abs(X_index_piece - X_index_target) != abs(Y_index_piece - Y_index_target):
+        return False, "[Invalid Move]: Bishop Only Moves Diagnolly You Moronnnnnn!"
+
+    if target_piece != '' and take_possible == False:
+        return False, '[Invalid Move]: Cannot Take Your Own Piece'
+
+
+    if X_index_target > X_index_piece and Y_index_target > Y_index_piece:
+        Y_index_piece_copy = Y_index_piece
+        X_index_piece_copy = X_index_piece
+        while Y_index_target - 1 > Y_index_piece_copy :
+            Y_index_piece_copy = Y_index_piece_copy + 1
+            X_index_piece_copy = X_index_piece_copy + 1
+
+            if position[Y_index_piece_copy][X_index_piece_copy] != '':
+                return False, '[Invalid Move]: Something In The Wayy'
+
+    if X_index_target > X_index_piece and Y_index_target < Y_index_piece:
+        Y_index_piece_copy = Y_index_piece
+        X_index_piece_copy = X_index_piece
+        while Y_index_target + 1 < Y_index_piece_copy :
+            Y_index_piece_copy = Y_index_piece_copy - 1
+            X_index_piece_copy = X_index_piece_copy + 1
+
+            if position[Y_index_piece_copy][X_index_piece_copy] != '':
+                return False, '[Invalid Move]: Something In The Wayy'
+
+    if X_index_target < X_index_piece and Y_index_target > Y_index_piece:
+        Y_index_piece_copy = Y_index_piece
+        X_index_piece_copy = X_index_piece
+        while Y_index_target - 1 > Y_index_piece_copy:
+            Y_index_piece_copy = Y_index_piece_copy + 1
+            X_index_piece_copy = X_index_piece_copy - 1
+
+            if position[Y_index_piece_copy][X_index_piece_copy] != '':
+                return False, '[Invalid Move]: Something In The Wayy'   
+
+    if X_index_target < X_index_piece and Y_index_target < Y_index_piece:
+        Y_index_piece_copy = Y_index_piece
+        X_index_piece_copy = X_index_piece
+        while Y_index_target + 1 < Y_index_piece_copy:
+            Y_index_piece_copy = Y_index_piece_copy - 1
+            X_index_piece_copy = X_index_piece_copy - 1
+
+            if position[Y_index_piece_copy][X_index_piece_copy] != '':
+                return False, '[Invalid Move]: Something In The Wayy'   
+
+    if position[Y_index_target][X_index_target] == '':
+        return True, '[Valid Move]: Sheesshhhh We Moving Diagnolly'
+
+    if position[Y_index_target][X_index_target] != '' and take_possible == True:
+        return True, '[Valid Move]: Yohooo Took With The Bishop'
 
             
 def is_move_valid(piece, square, position, target_square):
@@ -174,6 +234,12 @@ def is_move_valid(piece, square, position, target_square):
         validity, message = is_legal_knight_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
         print(message)
         return validity
+
+    if piece[0] == 'B':
+        validity, message = is_legal_bishop_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+        print(message)
+        return validity
+
 
 
 
