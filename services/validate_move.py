@@ -239,6 +239,28 @@ def is_legal_queen_move(Y_index_piece, X_index_piece, Y_index_target, X_index_ta
         return False, "[Invalid Move]: You made an Invalid Move With The Queen! That's Something"
 
 
+def is_legal_king_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible):
+
+    if target_piece != '' and take_possible == False:
+        return False, '[Invalid Move]: Cannot Take Your Own Piece'
+
+    if Y_index_target == Y_index_piece and X_index_target == X_index_piece:
+        return False, "Not To The Same Square! :("
+
+    if abs(Y_index_target - Y_index_piece) > 1:
+        return False, "King Can Only Move 1 Square In Any Direction"
+
+    if abs(X_index_target - X_index_piece) > 1:
+        return False, "King Can Only Move 1 Square In Any Direction"
+
+    is_king_attacked = False # TODO Check Kings Safety
+
+    if is_king_attacked == False:
+        return True, "Moving The King Be Careful"
+                                                
+    
+
+
 def is_move_valid(piece, square, position, target_square):
     Y_index_piece = square[0]
     X_index_piece = square[1]
@@ -280,6 +302,12 @@ def is_move_valid(piece, square, position, target_square):
         validity, message = is_legal_queen_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
         print(message)
         return validity
+
+    if piece[0] == 'K':
+        validity, message = is_legal_king_move(Y_index_piece, X_index_piece, Y_index_target, X_index_target, target_piece, position, piece_color, take_possible)
+        print(message)
+        return validity
+
 
 
     
